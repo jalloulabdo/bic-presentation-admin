@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductFormRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -12,7 +16,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::orderBy('id')->get();
+
+        return $products;
     }
 
     /**
@@ -26,9 +32,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductFormRequest $request)
     {
-        //
+        $user     = Product::create(['name' => $request->name,'category_id' =>$request->idCategory]);
+        return response()->json(['success' => true, 'data' => $user]);
     }
 
     /**
@@ -44,15 +51,21 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return $product;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductFormRequest $request, Product $product)
     {
-        //
+         
+        $product->update([
+                    'name' => $request->name,
+                    'category_id' => $request->idCategory, 
+                ]);
+        
+        return response()->json(['success' => true, 'data' => $product]);
     }
 
     /**

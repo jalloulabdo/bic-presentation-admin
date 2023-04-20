@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(UserController::class)->group(function () {
-    Route::get('get_users', 'index');
-});
+ 
+Route::resource('users',UserController::class);
+Route::resource('products',ProductController::class);
+Route::resource('categories',CategoryController::class);
+
+ 
