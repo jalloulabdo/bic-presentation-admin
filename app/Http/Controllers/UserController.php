@@ -39,8 +39,9 @@ class UserController extends Controller
         $email    = $request->email;
         $password = $request->password;
         $phone = $request->phone;
+        $serial = $request->serial;
 
-        $user     = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password), 'phone' => $phone]);
+        $user     = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password), 'phone' => $phone, 'serial' => $serial]);
         return response()->json(['success' => true, 'data' => $user]);
     }
 
@@ -73,7 +74,8 @@ class UserController extends Controller
         $user->update([
                     'name' => $request->name,
                     'email' => $request->email,
-                    'phone' => $request->phone
+                    'phone' => $request->phone,
+                    'serial' => $request->serial
                 ]);
         
         return response()->json(['success' => true, 'data' => $user]);

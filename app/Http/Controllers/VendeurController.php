@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VendeurFormRequest;
 use App\Models\Vendeur;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class VendeurController extends Controller
      */
     public function index()
     {
-        //
+        $vendeurs = Vendeur::orderBy('id')->get();
+
+        return $vendeurs;
     }
 
     /**
@@ -26,9 +29,10 @@ class VendeurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(VendeurFormRequest $request)
     {
-        //
+        $Vendeur     = Vendeur::create(['name' => $request->name, 'email' => $request->email, 'serial' => $request->serial]);
+        return response()->json(['success' => true, 'data' => $Vendeur]);
     }
 
     /**
@@ -44,15 +48,21 @@ class VendeurController extends Controller
      */
     public function edit(Vendeur $vendeur)
     {
-        //
+        return $vendeur;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vendeur $vendeur)
+    public function update(VendeurFormRequest $request, Vendeur $vendeur)
     {
-        //
+        $vendeur->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'serial' => $request->serial
+        ]);
+
+        return response()->json(['success' => true, 'data' => $vendeur]);
     }
 
     /**
@@ -60,6 +70,16 @@ class VendeurController extends Controller
      */
     public function destroy(Vendeur $vendeur)
     {
-        //
+        $vendeur->delete();
+        return response()->json(['success' => true]);
+    }
+
+
+     /**
+     * get Vendeur.
+     */
+    public function getVendeur($serial){
+       $vendeur = Vendeur::where('serial',$serial)->first();
+       return response()->json(['success' => true, 'data' =>$vendeur ]);
     }
 }

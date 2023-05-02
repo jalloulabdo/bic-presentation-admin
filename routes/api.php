@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\VendeurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource('users',UserController::class);
 Route::resource('products',ProductController::class);
 Route::resource('categories',CategoryController::class);
-
+Route::resource('vendeurs',VendeurController::class);
+Route::get('getVendeur/{serial}',[VendeurController::class,'getVendeur'])->name('getVendeur');
  

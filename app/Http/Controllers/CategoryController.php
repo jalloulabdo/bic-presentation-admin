@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryFormRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,33 +24,18 @@ class CategoryController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
-        $rules = [
-            'name' => 'required',
-        ];
-
-        $input     = $request->only('name', 'email', 'password');
-        $validator = Validator::make($input, $rules);
-
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'error' => $validator->messages()]);
-        }
-        $name = $request->name;
-        $email    = $request->email;
-        $password = $request->password;
-        $phone = $request->phone;
-
-        $category     = Category::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password), 'phone' => $phone]);
-        return response()->json(['success' => true, 'data' => $category]);
+        
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryFormRequest $request)
     {
-        //
+        $user     = Category::create(['name' => $request->name]);
+        return response()->json(['success' => true, 'data' => $user]);
     }
 
     /**
@@ -63,35 +49,30 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        $category = Category::findOrFail($id);
         return $category;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update($id, Request $request)
+    public function update(CategoryFormRequest $request,Category $category)
     {
-        $newCategory =  Category::where('id', $id)
-            ->update([
-                'name' => $request->name,
-            ]);
-        $category = Category::findOrFail($id);
-        return $category;
+        $category->update([
+            'name' => $request->name, 
+        ]);
+
+        return response()->json(['success' => true, 'data' => $category]);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
-        if ($category)
-            $category->delete();
-        else
-            return response()->json('errr');
-        return response()->json(null);
+        $category->delete();
+        return response()->json(['success' => true]);
     }
 }
