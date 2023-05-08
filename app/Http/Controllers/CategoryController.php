@@ -75,4 +75,9 @@ class CategoryController extends Controller
         $category->delete();
         return response()->json(['success' => true]);
     }
+
+    public function getCategory($name){
+        $category = Category::where('name',$name)->first();
+        return response()->json(['success' => true, 'data' =>$category ]);
+    }
 }
